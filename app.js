@@ -8,6 +8,7 @@ var nodemon= require('nodemon');
 //LOAD Routes
 var mainchartdata_routes=require('./routes/mainChartRoutes');
 var piechartdata_routes=require('./routes/pieChartRoutes');
+var table_routes=require('./routes/tableRoutes'); 
 
 
 
@@ -29,6 +30,7 @@ app.use((req,res,next)=>{
 //routes
 app.use('/', mainchartdata_routes);
 app.use('/', piechartdata_routes);
+app.use('/', table_routes);
 
 
 
@@ -85,18 +87,6 @@ app.get('/', (req,res)=>{
         `
     )
 });
-
-
-app.post('/test:id',(req,res)=>{
-    console.log(req.body);
-    console.log(req.params);
-    console.log(req.query);
-
-
-    res.status(200).send({message:'Datos Recibidos por post'});
-
-});
-
 
 
 
