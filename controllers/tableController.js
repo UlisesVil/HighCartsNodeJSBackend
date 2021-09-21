@@ -7,11 +7,11 @@ var controller={
 
     getTableLabels:(req,res)=>{
         tableLabelsModel.find({}).exec((err, labels)=>{
-            if(err) return res.status(500).send({message:'No se pudo obtener informacion de la Base de Datos'});
-            if(!labels) return res.status(404).send({message:'No se encontro Informacion en la Base de Datos'});
+            if(err) return res.status(500).send({message:'Could not get information from the Database'});
+            if(!labels) return res.status(404).send({message:'No Information Found in the Database'});
             return res.status(200).send({
                 data:labels,
-                message:'Informacion Enviada con Exito!!!'
+                message:'Information Sent Successfully!!!'
             });
         });
     },
@@ -19,17 +19,17 @@ var controller={
     getAllTabledata:(req, res)=>{
         let dataId=req.params.id;
         var labels=  tableLabelsModel.findById(dataId,(err,labels)=>{
-            if(err) return res.status(500).send({message:'Aun no hay datos'});
-            if(!labels) return res.status(404).send({message:'No se encontraron datos'});
+            if(err) return res.status(500).send({message:'There is no information in the database'});
+            if(!labels) return res.status(404).send({message:'No data found'});
             if(labels){
                 var tableData=tableDataModel.find({tableLabelId:dataId},(err,tableData)=>{
-                    if(err) return res.status(500).send({message:'Aun no hay series de datos'});
-                    if(!tableData) return res.status(404).send({message:'No se encontraron datos para este ID'});
+                    if(err) return res.status(500).send({message:'No data series yet'});
+                    if(!tableData) return res.status(404).send({message:'No data found for this ID'});
                     if(tableData){
                         return res.status(200).send({
                             labels: labels,
                             data: tableData,
-                            message:'Solicitud recibida y datos entregados'
+                            message:'Request received and data delivered'
                         });
                     }
                 });   
@@ -46,16 +46,16 @@ var controller={
         
         if(req.body.idLabel===undefined){
             tableLabels.save((err, tableLabelsDB)=>{
-                if(err) return res.status(500).send({message:'Error al guardar en base de datos'});
-                if(!tableLabelsDB) return res.status(404).send({message:'No se recibieron los datos a guardar'});
+                if(err) return res.status(500).send({message:'Failed to save to database'});
+                if(!tableLabelsDB) return res.status(404).send({message:'The data to save was not received'});
                 return res.status(200).send({
                     data:tableLabelsDB,
-                    message:'Datos guardados en Base de Datos exitosamente!!!'
+                    message:'Data saved in Database successfully!!!'
                 });
             });
         }else{
             return res.status(200).send({
-                message:'No se pudo guardar debido a que ya existe un objeto'
+                message:'Could not save because an object already exists'
             });
         }
     },
@@ -69,11 +69,11 @@ var controller={
         tableData.dataH3= data.dataH3;
 
         tableData.save((err, tableDataDB)=>{
-            if(err) return res.status(500).send({message:'Error al guardar en base de datos'});
-            if(!tableDataDB) return res.status(404).send({message:'No se recibieron los datos a guardar'});
+            if(err) return res.status(500).send({message:'Failed to save to database'});
+            if(!tableDataDB) return res.status(404).send({message:'The data to save was not received'});
             return res.status(200).send({
                 data:tableDataDB,
-                message:'Datos guardados en Base de Datos exitosamente!!!'
+                message:'Data saved in Database successfully!!!'
             });
         });
     },
@@ -88,11 +88,11 @@ var controller={
         }
     
         tableLabelsModel.findByIdAndUpdate(idLabel, tableLabels,{new:true},(err,labelsUpdated)=>{
-            if(err) return res.status(500).send({message:'Error  al actualizar'});
-            if(!labelsUpdated) return res.status(404).send({message:'No existe  el proyecto para ser actualizado'});
+            if(err) return res.status(500).send({message:'Update failed'});
+            if(!labelsUpdated) return res.status(404).send({message:'There is no data to be updated'});
             return res.status(200).send({
                 project: labelsUpdated,
-                message:'Labels Actualizadas correctamente'
+                message:'Labels Updated correctly'
             });
         });   
     },
@@ -100,8 +100,8 @@ var controller={
     deleteTableData:(req,res)=>{
         let tabledataId=req.params.id;
         tableDataModel.findOneAndRemove({'_id':tabledataId},(err,tableDataDeleted)=>{
-            if(err) return res.status(500).send({message:'Error al eliminar'});
-            if(!tableDataDeleted) return res.status(404).send({message:'No se encontro el elemento en la base de datos'});
+            if(err) return res.status(500).send({message:'Delete failed'});
+            if(!tableDataDeleted) return res.status(404).send({message:'The item was not found in the database'});
             return res.status(200).send({
                 tableDataDeleted:tableDataDeleted,
                 message:'Series Deleted Successfully'

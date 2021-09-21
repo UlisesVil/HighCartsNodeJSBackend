@@ -1,14 +1,14 @@
 'use strict'
 
-var mainChartData = require('../models/mainChartModel');
+var mainChartData = require('../models/mainChartDataModel');
 var mainChartLabels = require('../models/mainChartLabelsModel');
 
 var controller={
 
     getMainChartLabels:(req,res)=>{
         mainChartLabels.find({}).exec((err, labels)=>{
-            if(err) return res.status(500).send({message:'No se pudo obtener informacion de la Base de Datos'});
-            if(!labels) return res.status(404).send({message:'No se encontro Informacion en la Base de Datos'});
+            if(err) return res.status(500).send({message:'Could not get information from Database'});
+            if(!labels) return res.status(404).send({message:'No Information Found in the Database'});
             return res.status(200).send({
                 data:labels,
                 message:'Informacion Enviada con Exito!!!'
@@ -19,17 +19,17 @@ var controller={
     getAlldata:(req, res)=>{
         let dataId=req.params.id;
         var labels=  mainChartLabels.findById(dataId,(err,labels)=>{
-            if(err) return res.status(500).send({message:'Aun no hay datos'});
-            if(!labels) return res.status(404).send({message:'No se encontraron datos'});
+            if(err) return res.status(500).send({message:'There is no information in the database'});
+            if(!labels) return res.status(404).send({message:'No data found'});
             if(labels){
                 var chartData=mainChartData.find({chartlabelId:dataId},(err,chartData)=>{
-                    if(err) return res.status(500).send({message:'Aun no hay series de datos'});
-                    if(!chartData) return res.status(404).send({message:'No se encontraron datos para este ID'});
+                    if(err) return res.status(500).send({message:'There is no information in the database'});
+                    if(!chartData) return res.status(404).send({message:'No data found for this ID'});
                     if(chartData){
                         return res.status(200).send({
                             labels: labels,
                             data: chartData,
-                            message:'Solicitud recibida y datos entregados'
+                            message:'Request received and data delivered'
                         });
                     }
                 });   
@@ -42,9 +42,11 @@ var controller={
         var arrData=[];
         for(let i=0; i<datastr.length; i++){
             if(datastr[i]!=''){
-                arrData.push(parseInt(datastr[i]));
+                let newNumber=Math.round(parseFloat(datastr[i]).toFixed(1));
+                arrData.push(newNumber);
             }
         }
+       
         let newArr= JSON.stringify(arrData);
         var chartData = new mainChartData;
         var data = req.body;
@@ -54,11 +56,11 @@ var controller={
         chartData.target=data.target;
 
         chartData.save((err, mainChartDataDB)=>{
-            if(err) return res.status(500).send({message:'Error al guardar en base de datos'});
-            if(!mainChartDataDB) return res.status(404).send({message:'No se recibieron los datos a guardar'});
+            if(err) return res.status(500).send({message:'Failed to save to database'});
+            if(!mainChartDataDB) return res.status(404).send({message:'The data to save was not received'});
             return res.status(200).send({
                 data:mainChartDataDB,
-                message:'Datos guardados en Base de Datos exitosamente!!!'
+                message:'Data saved successfully!!!'
             });
         });
     },
@@ -71,19 +73,20 @@ var controller={
         chartLabels.labelXAxis= labels.labelXAxis;
         chartLabels.labelYAxis= labels.labelYAxis;
         chartLabels.toolTip= labels.toolTip;
+        chartLabels.categories= labels.categories;
         
         if(req.body.idLabel===undefined){
             chartLabels.save((err, mainchartLabelsDB)=>{
-                if(err) return res.status(500).send({message:'Error al guardar en base de datos'});
-                if(!mainchartLabelsDB) return res.status(404).send({message:'No se recibieron los datos a guardar'});
+                if(err) return res.status(500).send({message:'Failed to save to database'});
+                if(!mainchartLabelsDB) return res.status(404).send({message:'The data to save was not received'});
                 return res.status(200).send({
                     data:mainchartLabelsDB,
-                    message:'Datos guardados en Base de Datos exitosamente!!!'
+                    message:'Data saved successfully!!!'
                 });
             });
         }else{
             return res.status(200).send({
-                message:'No se pudo guardar debido a que ya existe un objeto'
+                message:'Could not save because an object already exists'
             });
         }
     },
@@ -96,15 +99,16 @@ var controller={
             subTitle:updateLabels.subTitle, 
             labelXAxis:updateLabels.labelXAxis, 
             labelYAxis:updateLabels.labelYAxis, 
-            toolTip:updateLabels.toolTip,   
+            toolTip:updateLabels.toolTip,
+            categories:updateLabels.categories,
         }
     
         mainChartLabels.findByIdAndUpdate(idLabel, chartLabels,{new:true},(err,labelsUpdated)=>{
-            if(err) return res.status(505).send({message:'Error  al actualizar'});
-            if(!labelsUpdated) return res.status(404).send({message:'No existe  el proyecto para ser actualizado'});
+            if(err) return res.status(505).send({message:'Update failed'});
+            if(!labelsUpdated) return res.status(404).send({message:'The project does not exist to be updated'});
             return res.status(200).send({
                 project: labelsUpdated,
-                message:'Labels Actualizadas correctamente'
+                message:'Labels Updated correctly'
             });
         });
     },
@@ -112,8 +116,8 @@ var controller={
     deleteSeries:(req,res)=>{
         let seriesId=req.params.id;
         mainChartData.findOneAndRemove({'_id':seriesId},(err,seriesDeleted)=>{
-            if(err) return res.status(500).send({message:'Error al eliminar'});
-            if(!seriesDeleted) return res.status(404).send({message:'No se encontro el elemento en la base de datos'});
+            if(err) return res.status(500).send({message:'Delete failed'});
+            if(!seriesDeleted) return res.status(404).send({message:'The item was not found in the database'});
             return res.status(200).send({
                 seriesDeleted:seriesDeleted,
                 message:'Series Deleted Successfully'
@@ -123,11 +127,11 @@ var controller={
 
     getdataCards:(req,res)=>{
         mainChartData.find({}).exec((err,data)=>{
-            if(err) return res.status(500).send({message:'No se pudo obtener informacion de la Base de Datos'});
-            if(!data) return res.status(404).send({message:'No se encontro Informacion en la Base de Datos'});
+            if(err) return res.status(500).send({message:'Could not get information from Database'});
+            if(!data) return res.status(404).send({message:'No Information Found in the Database'});
             return res.status(200).send({
                 data:data,
-                message:'Informacion Enviada con Exito!!!'
+                message:'Information Sent Successfully!!!'
             });
         });
     },
