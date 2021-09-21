@@ -19,6 +19,9 @@ var mainChartLabelSchema=Schema({
     toolTip:{
         type:String
     },
+    categories:{
+        type:Array
+    },
     date:{
         type:Date,
         default:Date.now()
