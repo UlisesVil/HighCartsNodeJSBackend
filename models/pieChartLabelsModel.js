@@ -19,5 +19,4 @@ var pieChartLabelSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('pieChartLabel',pieChartLabelSchema);

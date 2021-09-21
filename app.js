@@ -2,20 +2,14 @@ var express= require('express');
 var app= express();
 var nodemon= require('nodemon');
 
-
-
-
 //LOAD Routes
 var mainchartdata_routes=require('./routes/mainChartRoutes');
 var piechartdata_routes=require('./routes/pieChartRoutes');
 var table_routes=require('./routes/tableRoutes'); 
 
-
-
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
-
 
 //CORS
 app.use((req,res,next)=>{
@@ -26,19 +20,12 @@ app.use((req,res,next)=>{
     next();
 });
 
-
 //routes
 app.use('/', mainchartdata_routes);
 app.use('/', piechartdata_routes);
 app.use('/', table_routes);
 
-
-
-
-
-
 //Main Page from Backend
-
 app.get('/', (req,res)=>{
     res.status(200).send(
         `
@@ -82,12 +69,10 @@ app.get('/', (req,res)=>{
                 <h1 style='color: white;'>Welcome!! This is the API Rest from The Charts Angular APP</h1>
                 <h2>You can visit the site here: <a href="https://ulisesvil.github.io" target="_blank">Charts Angular APP</a></h2>
                 <img src="https://images-cdn.newscred.com/Zz04NjA3ZjljMjQ0ODkxMWViOWRjYzU1OGJkNjI1ZjVkZA==">
-                </div>
+            </div>
         </body>
         `
     )
 });
-
-
 
 module.exports=app;

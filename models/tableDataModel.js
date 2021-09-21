@@ -26,5 +26,4 @@ var tableDataSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('tableData',tableDataSchema);

@@ -22,5 +22,4 @@ var pieChartDataSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('pieChartData',pieChartDataSchema);

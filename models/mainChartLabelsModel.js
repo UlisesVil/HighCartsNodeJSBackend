@@ -25,5 +25,4 @@ var mainChartLabelSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('mainChartLabel',mainChartLabelSchema);

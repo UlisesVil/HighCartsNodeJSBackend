@@ -26,5 +26,4 @@ var mainChartDataSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('mainChartData',mainChartDataSchema);

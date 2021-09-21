@@ -2,21 +2,16 @@
 
 var express= require('express');
 var mainChartDataController= require('../controllers/mainChartController');
-
 var router = express.Router();
 
-
-
-router.post('/saveMainChartData', mainChartDataController.saveMainChartData);
-router.get('/getdataCards', mainChartDataController.getdataCards);
-router.post('/saveMainChartLabels', mainChartDataController.saveMainChartLabels);
+//MainChart
 router.get('/getMainChartLabels/:id?', mainChartDataController.getMainChartLabels);
-router.put('/updateMainChartLabels', mainChartDataController.updateMainChartLabels);
-
 router.get('/getAlldata/:id', mainChartDataController.getAlldata);
+router.post('/saveMainChartData', mainChartDataController.saveMainChartData);
+router.post('/saveMainChartLabels', mainChartDataController.saveMainChartLabels);
+router.put('/updateMainChartLabels', mainChartDataController.updateMainChartLabels);
 router.delete('/deleteSeries/:id', mainChartDataController.deleteSeries);
-
-
-
+//Cards
+router.get('/getdataCards', mainChartDataController.getdataCards);
 
 module.exports= router;

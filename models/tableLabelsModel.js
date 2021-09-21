@@ -19,5 +19,4 @@ var tableLabelSchema=Schema({
     }
 });
 
-
 module.exports=mongoose.model('tableLabel',tableLabelSchema);
